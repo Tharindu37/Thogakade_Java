@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.jfoenix.controls.JFXButton?>
+<?import javafx.scene.Cursor?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+
+
+<AnchorPane prefHeight="272.0" prefWidth="565.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.seekerscloud.pos.controller.DashboardFormController">
+   <children>
+      <JFXButton layoutX="24.0" layoutY="61.0" onAction="#openCustomerFormOnAction" prefHeight="82.0" prefWidth="166.0" style="-fx-background-color: #95a5a6;" text="Customer Management">
+         <font>
+            <Font size="14.0" />
+         </font>
+         <cursor>
+            <Cursor fx:constant="HAND" />
+         </cursor>
+      </JFXButton>
+      <JFXButton layoutX="199.0" layoutY="61.0" onAction="#openItemFormOnAction" prefHeight="82.0" prefWidth="166.0" style="-fx-background-color: #95a5a6;" text="Item Management">
+         <font>
+            <Font size="14.0" />
+         </font>
+         <cursor>
+            <Cursor fx:constant="HAND" />
+         </cursor>
+      </JFXButton>
+      <JFXButton layoutX="24.0" layoutY="159.0" onAction="#openPlaceOrderFormOnAction" prefHeight="82.0" prefWidth="518.0" style="-fx-background-color: #f1c40f;" text="Place Order">
+         <font>
+            <Font size="18.0" />
+         </font>
+         <cursor>
+            <Cursor fx:constant="HAND" />
+         </cursor>
+      </JFXButton>
+      <JFXButton layoutX="376.0" layoutY="61.0" onAction="#openOrderDetailsFormOnAction" prefHeight="82.0" prefWidth="166.0" style="-fx-background-color: #95a5a6;" text="Order Details">
+         <font>
+            <Font size="14.0" />
+         </font>
+         <cursor>
+            <Cursor fx:constant="HAND" />
+         </cursor>
+      </JFXButton>
+      <Label layoutX="22.0" layoutY="14.0" prefHeight="35.0" prefWidth="202.0" text="Shop Dashboard" textFill="#3e3bff">
+         <font>
+            <Font size="24.0" />
+         </font>
+      </Label>
+      <Separator layoutX="22.0" layoutY="48.0" prefHeight="4.0" prefWidth="518.0" />
+      <Separator layoutX="161.0" layoutY="256.0" prefHeight="4.0" prefWidth="297.0" />
+      <Label layoutX="466.0" layoutY="249.0" text="Varsion : 1.0.0" />
+      <Label layoutX="24.0" layoutY="249.0" text="Powerd by Seekercloud" />
+   </children>
+</AnchorPane>
