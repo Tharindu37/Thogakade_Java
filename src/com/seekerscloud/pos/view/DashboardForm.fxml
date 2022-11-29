@@ -7,8 +7,7 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-
-<AnchorPane prefHeight="272.0" prefWidth="565.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.seekerscloud.pos.controller.DashboardFormController">
+<AnchorPane fx:id="dashboardContext" prefHeight="272.0" prefWidth="565.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.seekerscloud.pos.controller.DashboardFormController">
    <children>
       <JFXButton layoutX="24.0" layoutY="61.0" onAction="#openCustomerFormOnAction" prefHeight="82.0" prefWidth="166.0" style="-fx-background-color: #95a5a6;" text="Customer Management">
          <font>
@@ -51,5 +50,10 @@
       <Separator layoutX="161.0" layoutY="256.0" prefHeight="4.0" prefWidth="297.0" />
       <Label layoutX="466.0" layoutY="249.0" text="Varsion : 1.0.0" />
       <Label layoutX="24.0" layoutY="249.0" text="Powerd by Seekercloud" />
+      <Label fx:id="lblDate" layoutX="403.0" layoutY="22.0" prefHeight="20.0" prefWidth="141.0" text="2022-10-02">
+         <font>
+            <Font size="14.0" />
+         </font>
+      </Label>
    </children>
 </AnchorPane>

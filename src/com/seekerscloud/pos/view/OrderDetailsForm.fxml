@@ -1,14 +1,31 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.*?>
-<?import java.util.*?>
-<?import javafx.scene.*?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
+<?import com.jfoenix.controls.JFXButton?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
 
-<AnchorPane xmlns="http://javafx.com/javafx"
-            xmlns:fx="http://javafx.com/fxml"
-            fx:controller="com.seekerscloud.pos.controller.OrderDetailsFormController"
-            prefHeight="400.0" prefWidth="600.0">
 
+<AnchorPane fx:id="orderDetailsContext" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.seekerscloud.pos.controller.OrderDetailsFormController">
+   <children>
+      <JFXButton layoutX="12.0" layoutY="14.0" onAction="#backToHomeOnAction" style="-fx-background-color: #34495e;" text="Back to Home" textFill="WHITE" />
+      <Label layoutX="17.0" layoutY="47.0" text="Order Details Form">
+         <font>
+            <Font name="System Bold" size="18.0" />
+         </font>
+      </Label>
+      <Separator layoutX="17.0" layoutY="73.0" prefHeight="0.0" prefWidth="576.0" />
+      <TableView fx:id="tblOrder" layoutX="6.0" layoutY="82.0" prefHeight="313.0" prefWidth="587.0">
+        <columns>
+          <TableColumn fx:id="colId" prefWidth="75.0" text="Order Id" />
+          <TableColumn fx:id="colName" prefWidth="101.0" text="Customer" />
+            <TableColumn fx:id="colDate" prefWidth="199.0" text="Date" />
+            <TableColumn fx:id="colTotal" prefWidth="110.0" text="Total" />
+            <TableColumn fx:id="colOption" prefWidth="101.0" text="Option" />
+        </columns>
+      </TableView>
+   </children>
 </AnchorPane>
