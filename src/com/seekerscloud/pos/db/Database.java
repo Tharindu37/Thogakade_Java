@@ -20,10 +20,10 @@ public class Database {
         customerTable.add(new Customer("C004","Lakshan","Galle",80000));
         customerTable.add(new Customer("C005","Sahan","Kurunegala",67000));
 
-        itemTable.add(new Item("I-001","Description 1",25,173));
-        itemTable.add(new Item("I-002","Description 2",15,450));
-        itemTable.add(new Item("I-003","Description 3",5,500));
-        itemTable.add(new Item("I-004","Description 4",45,1300));
-        itemTable.add(new Item("I-005","Description 5",4,60));
+        itemTable.add(new Item("I001","Description 1",25,173));
+        itemTable.add(new Item("I002","Description 2",15,450));
+        itemTable.add(new Item("I003","Description 3",5,500));
+        itemTable.add(new Item("I004","Description 4",45,1300));
+        itemTable.add(new Item("I005","Description 5",4,60));
     }
 }

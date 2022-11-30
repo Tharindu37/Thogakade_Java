@@ -7,14 +7,14 @@ import java.util.Date;
 public class OrderTM {
     private String orderId;
     private String name;
-    private Date date;
+    private String date;
     private double total;
     private Button btn;
 
     public OrderTM() {
     }
 
-    public OrderTM(String orderId, String name, Date date, double total, Button btn) {
+    public OrderTM(String orderId, String name, String date, double total, Button btn) {
         this.orderId = orderId;
         this.name = name;
         this.date = date;
@@ -38,11 +38,11 @@ public class OrderTM {
         this.name = name;
     }
 
-    public Date getDate() {
+    public String getDate() {
         return date;
     }
 
-    public void setDate(Date date) {
+    public void setDate(String date) {
         this.date = date;
     }
 

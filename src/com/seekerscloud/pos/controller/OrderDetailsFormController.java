@@ -1,5 +1,6 @@
 package com.seekerscloud.pos.controller;
 
+import com.seekerscloud.pos.db.DBConnection;
 import com.seekerscloud.pos.db.Database;
 import com.seekerscloud.pos.modal.Order;
 import com.seekerscloud.pos.view.tm.OrderTM;
@@ -18,6 +19,8 @@ import javafx.stage.Stage;
 import javafx.stage.Window;
 
 import java.io.IOException;
+import java.sql.*;
+import java.util.ArrayList;
 
 public class OrderDetailsFormController {
     public AnchorPane orderDetailsContext;
@@ -38,36 +41,43 @@ public class OrderDetailsFormController {
     }
 
     private void loadOrders() {
-        ObservableList<OrderTM> tmList= FXCollections.observableArrayList();
-        for (Order order: Database.orderTable
-             ) {
-            Button btn=new Button("View More");
-            tmList.add(new OrderTM(
-                    order.getOrderId(),
-                    order.getCustomer(),
-                    order.getDate(),
-                    order.getTotalCost(),
-                    btn
-            ));
-            btn.setOnAction(event -> {
-                try {
-                    FXMLLoader loader=new FXMLLoader(
-                            getClass().getResource("../view/ItemDetailsForm.fxml")
-                    );
-                    Parent parent = loader.load();
-                    ItemDetailsFormController controller = loader.getController();
-                    controller.loadOrderDetails(order.getOrderId());
-                    Stage stage=new Stage();
-                    stage.setScene(new Scene(
-                            parent
-                    ));
-                    stage.show();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            });
+        try {
+            String sql="SELECT * FROM `Order`";
+            PreparedStatement statement = DBConnection.getInstance().getConnection().prepareStatement(sql);
+            ResultSet set = statement.executeQuery();
+            ObservableList<OrderTM> tmList= FXCollections.observableArrayList();
+            while (set.next()){
+                Button btn=new Button("View More");
+                OrderTM tm = new OrderTM(
+                        set.getString(1),
+                        set.getString(4),
+                        set.getString(2),
+                        set.getDouble(3),
+                        btn
+                );
+                tmList.add(tm);
+                btn.setOnAction(event -> {
+                    try {
+                        FXMLLoader loader=new FXMLLoader(
+                                getClass().getResource("../view/ItemDetailsForm.fxml")
+                        );
+                        Parent parent = loader.load();
+                        ItemDetailsFormController controller = loader.getController();
+                        controller.loadOrderDetails(tm.getOrderId());
+                        Stage stage=new Stage();
+                        stage.setScene(new Scene(
+                                parent
+                        ));
+                        stage.show();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                });
+            }
+            tblOrder.setItems(tmList);
+        } catch (ClassNotFoundException | SQLException e) {
+            e.printStackTrace();
         }
-        tblOrder.setItems(tmList);
     }
 
     public void backToHomeOnAction(ActionEvent actionEvent) throws IOException {
