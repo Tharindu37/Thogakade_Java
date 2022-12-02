@@ -2,9 +2,15 @@ package com.seekerscloud.pos.controller;
 
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXTextField;
-import com.seekerscloud.pos.db.DBConnection;
-import com.seekerscloud.pos.db.Database;
-import com.seekerscloud.pos.modal.Customer;
+import com.seekerscloud.pos.bo.BoFactory;
+import com.seekerscloud.pos.bo.BoType;
+import com.seekerscloud.pos.bo.custom.CustomerBo;
+import com.seekerscloud.pos.dao.DaoFactory;
+import com.seekerscloud.pos.dao.DaoTypes;
+import com.seekerscloud.pos.dao.custom.CustomerDao;
+import com.seekerscloud.pos.dao.custom.impl.CustomerDaoImpl;
+import com.seekerscloud.pos.dto.CustomerDto;
+import com.seekerscloud.pos.entity.Customer;
 import com.seekerscloud.pos.view.tm.CustomerTM;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -15,11 +21,10 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
-import javafx.stage.Window;
 
-import javax.swing.*;
 import java.io.IOException;
 import java.sql.*;
+import java.util.ArrayList;
 import java.util.Optional;
 
 public class CustomerFormController {
@@ -36,6 +41,8 @@ public class CustomerFormController {
     public JFXButton btnSaveCustomer;
     public AnchorPane customerFormContext;
     public TextField txtSearch;
+
+    private CustomerBo customerBo= BoFactory.getInstance().getBo(BoType.CUSTOMER);
 
     private String searchText = "";
 
@@ -71,46 +78,36 @@ public class CustomerFormController {
         String searchText="%"+text+"%";
         try {
             ObservableList<CustomerTM> tmList = FXCollections.observableArrayList();
-
-            Connection connection = DBConnection.getInstance().getConnection();
-            String sql = "SELECT * FROM Customer WHERE name LIKE ? || address LIKE ?";
-            PreparedStatement statement = connection.prepareStatement(sql);
-            statement.setString(1,searchText);
-            statement.setString(2,searchText);
-            ResultSet set = statement.executeQuery();
-
-            while (set.next()) {
+            ArrayList<CustomerDto> customerList=customerBo.searchCustomer(searchText);
+            for (CustomerDto c:customerList
+                 ) {
                 Button btn = new Button("Delete");
                 CustomerTM tm = new CustomerTM(
-                        set.getString(1),
-                        set.getString(2),
-                        set.getString(3),
-                        set.getDouble(4),
+                        c.getId(),
+                        c.getName(),
+                        c.getAddress(),
+                        c.getSalary(),
                         btn
                 );
                 tmList.add(tm);
-                    btn.setOnAction(event -> {
-                        Alert alert=new Alert(Alert.AlertType.CONFIRMATION,
-                                "Are you sure whether do you want to delete this customer?",
-                                ButtonType.YES,ButtonType.NO);
-                        Optional<ButtonType> buttonType = alert.showAndWait();
-                        if (buttonType.get().equals(ButtonType.YES)){
-
-                            try {
-                                String sql1 = "DELETE FROM Customer WHERE id=?";
-                                PreparedStatement statement1 = DBConnection.getInstance().getConnection().prepareStatement(sql1);
-                                statement1.setString(1,tm.getId());
-                                if (statement1.executeUpdate()>0){
-                                    new Alert(Alert.AlertType.INFORMATION,"Deleted!").show();
-                                    searchCustomer(searchText);
-                                }else {
-                                    new Alert(Alert.AlertType.WARNING,"Try Again!").show();
-                                }
-                            }catch (ClassNotFoundException | SQLException e){
-                                e.printStackTrace();
+                btn.setOnAction(event -> {
+                    Alert alert=new Alert(Alert.AlertType.CONFIRMATION,
+                            "Are you sure whether do you want to delete this customer?",
+                            ButtonType.YES,ButtonType.NO);
+                    Optional<ButtonType> buttonType = alert.showAndWait();
+                    if (buttonType.get().equals(ButtonType.YES)){
+                        try {
+                            if (customerBo.deleteCustomer(tm.getId())){
+                                new Alert(Alert.AlertType.INFORMATION,"Deleted!").show();
+                                searchCustomer(searchText);
+                            }else {
+                                new Alert(Alert.AlertType.WARNING,"Try Again!").show();
                             }
+                        }catch (ClassNotFoundException | SQLException e){
+                            e.printStackTrace();
                         }
-                    });
+                    }
+                });
             }
             tblCustomer.setItems(tmList);
         } catch (ClassNotFoundException | SQLException e) {
@@ -119,48 +116,36 @@ public class CustomerFormController {
     }
 
     public void saveCustomerOnAction(ActionEvent actionEvent) {
-        Customer c1 = new Customer(txtId.getText(),
-                txtName.getText(),
-                txtAddress.getText(),
-                Double.parseDouble(txtSalary.getText()));
-
-        if (btnSaveCustomer.getText().equalsIgnoreCase(
-                "Save Customer")) {
+        if (btnSaveCustomer.getText().equalsIgnoreCase("Save Customer")) {
             try {
-                //database
-                String sql = "INSERT INTO Customer VALUES (?, ?, ?, ?)";
-                PreparedStatement statement = DBConnection.getInstance().getConnection().prepareStatement(sql);
-                statement.setString(1, c1.getId());
-                statement.setString(2, c1.getName());
-                statement.setString(3, c1.getAddress());
-                statement.setDouble(4, c1.getSalary());
-                //Statement statement=connection.createStatement();
-                //String sql="INSERT INTO Customer VALUES('"+c1.getId()+"','"+c1.getName()+"','"+c1.getAddress()+"','"+c1.getSalary()+"')";
-                //int isSaved = statement.executeUpdate(sql);
-                if (statement.executeUpdate() > 0) {
-                    new Alert(Alert.AlertType.INFORMATION,
-                            "Customer Saved!").show();
+                boolean isCustomerSaved = customerBo.saveCustomer(
+                        new CustomerDto(
+                                txtId.getText(),
+                                txtName.getText(),
+                                txtAddress.getText(),
+                                Double.parseDouble(txtSalary.getText())
+                        )
+                );
+                if (isCustomerSaved){
                     searchCustomer(searchText);
                     clearFields();
-                } else {
-                    new Alert(Alert.AlertType.WARNING,
-                            "Try Again!").show();
+                    new Alert(Alert.AlertType.INFORMATION,"Customer Saved!").show();
+                }else {
+                    new Alert(Alert.AlertType.INFORMATION,"Try Again!").show();
                 }
-            } catch (ClassNotFoundException | SQLException e) {
+            }catch (ClassNotFoundException | SQLException e){
                 e.printStackTrace();
             }
-
         } else {
             //update
-
             try {
-                String sql1 = "UPDATE Customer SET name=?,address=?,salary=? WHERE id=?";
-                PreparedStatement statement1 = DBConnection.getInstance().getConnection().prepareStatement(sql1);
-                statement1.setString(1,c1.getName());
-                statement1.setString(2,c1.getAddress());
-                statement1.setDouble(3,c1.getSalary());
-                statement1.setString(4,c1.getId());
-                if (statement1.executeUpdate()>0){
+                boolean isCustomerUpdated = customerBo.updateCustomer(new CustomerDto(
+                        txtId.getText(),
+                        txtName.getText(),
+                        txtAddress.getText(),
+                        Double.parseDouble(txtSalary.getText())
+                ));
+                if (isCustomerUpdated){
                     new Alert(Alert.AlertType.CONFIRMATION, "Updated!").show();
                     searchCustomer(searchText);
                     clearFields();

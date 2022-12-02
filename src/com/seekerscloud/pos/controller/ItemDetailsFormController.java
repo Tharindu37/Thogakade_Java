@@ -1,7 +1,9 @@
 package com.seekerscloud.pos.controller;
 
+import com.seekerscloud.pos.dao.DaoFactory;
+import com.seekerscloud.pos.dao.DaoTypes;
+import com.seekerscloud.pos.dao.custom.ItemDao;
 import com.seekerscloud.pos.db.DBConnection;
-import com.seekerscloud.pos.db.Database;
 import com.seekerscloud.pos.modal.ItemDetails;
 import com.seekerscloud.pos.modal.Order;
 import com.seekerscloud.pos.view.tm.ItemDetailsTM;

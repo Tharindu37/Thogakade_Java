@@ -1,15 +1,14 @@
-package com.seekerscloud.pos.modal;
+package com.seekerscloud.pos.dto;
 
-public class Item {
+public class ItemDto {
     private String code;
     private String description;
     private int qtyOnHand;
-    private double unitPrice;
 
-    public Item() {
+    public ItemDto() {
     }
 
-    public Item(String code, String description, int qtyOnHand, double unitPrice) {
+    public ItemDto(String code, String description, int qtyOnHand, double unitPrice) {
         this.code = code;
         this.description = description;
         this.qtyOnHand = qtyOnHand;
@@ -47,4 +46,6 @@ public class Item {
     public void setUnitPrice(double unitPrice) {
         this.unitPrice = unitPrice;
     }
+
+    private double unitPrice;
 }
